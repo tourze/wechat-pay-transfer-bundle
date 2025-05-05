@@ -14,7 +14,7 @@ use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
 use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
 use Tourze\EasyAdmin\Attribute\Column\ListColumn;
 use Tourze\EasyAdmin\Attribute\Filter\Filterable;
-use WechatPayBundle\Enum\TransferDetailStatus;
+use WechatPayTransferBundle\Enum\TransferDetailStatus;
 use WechatPayTransferBundle\Repository\TransferDetailRepository;
 
 #[ORM\Entity(repositoryClass: TransferDetailRepository::class)]

@@ -17,7 +17,7 @@ use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
 use Tourze\EasyAdmin\Attribute\Column\ListColumn;
 use Tourze\EasyAdmin\Attribute\Filter\Filterable;
 use WechatPayBundle\Entity\Merchant;
-use WechatPayBundle\Enum\TransferBatchStatus;
+use WechatPayTransferBundle\Enum\TransferBatchStatus;
 use WechatPayTransferBundle\Repository\TransferBatchRepository;
 
 #[ORM\Entity(repositoryClass: TransferBatchRepository::class)]
