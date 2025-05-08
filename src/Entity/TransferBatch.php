@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Attribute\Groups;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineTimestampBundle\Attribute\CreateTimeColumn;
@@ -26,7 +25,6 @@ class TransferBatch
 {
     #[ExportColumn]
     #[ListColumn(order: -1, sorter: true)]
-    #[Groups(['restful_read', 'admin_curd', 'recursive_view', 'api_tree'])]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
@@ -34,12 +32,10 @@ class TransferBatch
     private ?string $id = null;
 
     #[CreatedByColumn]
-    #[Groups(['restful_read'])]
     #[ORM\Column(nullable: true, options: ['comment' => '创建人'])]
     private ?string $createdBy = null;
 
     #[UpdatedByColumn]
-    #[Groups(['restful_read'])]
     #[ORM\Column(nullable: true, options: ['comment' => '更新人'])]
     private ?string $updatedBy = null;
 
@@ -86,7 +82,7 @@ class TransferBatch
     #[ORM\Column(length: 64, nullable: true, options: ['comment' => '微信批次单号'])]
     private ?string $batchId = null;
 
-    #[ORM\OneToMany(mappedBy: 'batch', targetEntity: TransferDetail::class)]
+    #[ORM\OneToMany(targetEntity: TransferDetail::class, mappedBy: 'batch')]
     private Collection $details;
 
     #[ORM\Column(length: 30, nullable: true, enumType: TransferBatchStatus::class, options: ['comment' => '批次状态'])]
@@ -97,13 +93,11 @@ class TransferBatch
     #[ListColumn(order: 98, sorter: true)]
     #[ExportColumn]
     #[CreateTimeColumn]
-    #[Groups(['restful_read', 'admin_curd', 'restful_read'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, options: ['comment' => '创建时间'])]
     private ?\DateTimeInterface $createTime = null;
 
     #[UpdateTimeColumn]
     #[ListColumn(order: 99, sorter: true)]
-    #[Groups(['restful_read', 'admin_curd', 'restful_read'])]
     #[Filterable]
     #[ExportColumn]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, options: ['comment' => '更新时间'])]
