@@ -13,7 +13,7 @@ use WechatPayTransferBundle\Repository\TransferDetailRepository;
 
 #[ORM\Entity(repositoryClass: TransferDetailRepository::class)]
 #[ORM\Table(name: 'wechat_payment_transfer_detail', options: ['comment' => '转账明细'])]
-class TransferDetail
+class TransferDetail implements \Stringable
 {
     use TimestampableAware;
     #[ORM\Id]
@@ -178,4 +178,9 @@ class TransferDetail
         $this->detailStatus = $detailStatus;
 
         return $this;
-    }}
+    }
+    public function __toString(): string
+    {
+        return (string) $this->getId();
+    }
+}

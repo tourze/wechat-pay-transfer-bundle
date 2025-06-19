@@ -16,7 +16,7 @@ use WechatPayTransferBundle\Repository\TransferBatchRepository;
 
 #[ORM\Entity(repositoryClass: TransferBatchRepository::class)]
 #[ORM\Table(name: 'wechat_payment_transfer_batch', options: ['comment' => '商家转账'])]
-class TransferBatch
+class TransferBatch implements \Stringable
 {
     use TimestampableAware;
     #[ORM\Id]
@@ -252,4 +252,9 @@ class TransferBatch
         $this->batchStatus = $batchStatus;
 
         return $this;
-    }}
+    }
+    public function __toString(): string
+    {
+        return (string) $this->getId();
+    }
+}
