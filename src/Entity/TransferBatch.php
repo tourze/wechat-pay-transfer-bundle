@@ -8,8 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
-use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
-use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
+use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 use WechatPayBundle\Entity\Merchant;
 use WechatPayTransferBundle\Enum\TransferBatchStatus;
 use WechatPayTransferBundle\Repository\TransferBatchRepository;
@@ -19,19 +18,13 @@ use WechatPayTransferBundle\Repository\TransferBatchRepository;
 class TransferBatch implements \Stringable
 {
     use TimestampableAware;
+    use BlameableAware;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ['comment' => 'ID'])]
     private ?string $id = null;
-
-    #[CreatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '创建人'])]
-    private ?string $createdBy = null;
-
-    #[UpdatedByColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '更新人'])]
-    private ?string $updatedBy = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, options: ['comment' => '商户'])]
@@ -67,7 +60,7 @@ class TransferBatch implements \Stringable
     #[ORM\Column(options: ['comment' => '转账总笔数'])]
     private int $totalNum;
 
-    #[ORM\Column(length: 36, nullable: true)]
+    #[ORM\Column(length: 36, nullable: true, options: ['comment' => '转账场景 ID'])]
     private ?string $transferSceneId = null;
 
     /**
@@ -90,30 +83,6 @@ class TransferBatch implements \Stringable
     public function getId(): ?string
     {
         return $this->id;
-    }
-
-    public function setCreatedBy(?string $createdBy): self
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    public function getCreatedBy(): ?string
-    {
-        return $this->createdBy;
-    }
-
-    public function setUpdatedBy(?string $updatedBy): self
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    public function getUpdatedBy(): ?string
-    {
-        return $this->updatedBy;
     }
 
     public function getMerchant(): ?Merchant

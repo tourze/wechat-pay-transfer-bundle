@@ -22,7 +22,6 @@ class TransferBatchTest extends TestCase
     {
         $details = $this->batch->getDetails();
         
-        $this->assertIsObject($details);
         $this->assertCount(0, $details);
     }
 
