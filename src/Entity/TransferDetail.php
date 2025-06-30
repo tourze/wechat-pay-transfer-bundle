@@ -2,9 +2,8 @@
 
 namespace WechatPayTransferBundle\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
+use Tourze\DoctrineSnowflakeBundle\Traits\SnowflakeKeyAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 use WechatPayTransferBundle\Enum\TransferDetailStatus;
@@ -14,14 +13,9 @@ use WechatPayTransferBundle\Repository\TransferDetailRepository;
 #[ORM\Table(name: 'wechat_payment_transfer_detail', options: ['comment' => '转账明细'])]
 class TransferDetail implements \Stringable
 {
+    use SnowflakeKeyAware;
     use TimestampableAware;
     use BlameableAware;
-    
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
-    #[ORM\Column(type: Types::BIGINT, nullable: false, options: ['comment' => 'ID'])]
-    private ?string $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'details')]
     #[ORM\JoinColumn(nullable: false)]
@@ -48,10 +42,6 @@ class TransferDetail implements \Stringable
     #[ORM\Column(length: 32, nullable: true, enumType: TransferDetailStatus::class, options: ['comment' => '明细状态'])]
     private ?TransferDetailStatus $detailStatus = null;
 
-    public function getId(): ?string
-    {
-        return $this->id;
-    }
 
     public function getBatch(): ?TransferBatch
     {
