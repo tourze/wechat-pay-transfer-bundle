@@ -1,0 +1,9 @@
+doctrine:
+  orm:
+    mappings:
+      WechatPayTransferBundle:
+        is_bundle: true
+        type: attribute
+        dir: 'Entity'
+        prefix: 'WechatPayTransferBundle\Entity'
+        alias: WechatPayTransfer

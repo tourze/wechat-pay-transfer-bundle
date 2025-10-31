@@ -6,3 +6,19 @@ services:
 
   WechatPayTransferBundle\Repository\:
     resource: '../../Repository/'
+    public: true
+
+  WechatPayTransferBundle\Controller\Admin\:
+    resource: '../../Controller/Admin/'
+    tags: ['controller.service_arguments']
+
+  WechatPayTransferBundle\Controller\Api\:
+    resource: '../../Controller/Api/'
+    tags: ['controller.service_arguments']
+
+  WechatPayTransferBundle\Command\:
+    resource: '../../Command/'
+
+  WechatPayTransferBundle\Service\:
+    resource: '../../Service/'
+    public: true

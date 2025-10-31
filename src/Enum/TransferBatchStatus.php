@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatPayTransferBundle\Enum;
 
 use Tourze\EnumExtra\Itemable;
@@ -24,5 +26,20 @@ enum TransferBatchStatus: string implements Labelable, Itemable, Selectable
             self::FINISHED => '已完成',
             self::CLOSED => '已关闭',
         };
+    }
+
+    /**
+     * 获取用于EasyAdmin选择字段的选项数组
+     *
+     * @return array<string, string>
+     */
+    public static function getSelectChoices(): array
+    {
+        $choices = [];
+        foreach (self::cases() as $case) {
+            $choices[$case->getLabel()] = $case->value;
+        }
+
+        return $choices;
     }
 }

@@ -2,171 +2,201 @@
 
 namespace WechatPayTransferBundle\Tests\Entity;
 
-use DateTimeImmutable;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Tourze\PHPUnitDoctrineEntity\AbstractEntityTestCase;
 use WechatPayTransferBundle\Entity\TransferBatch;
 use WechatPayTransferBundle\Entity\TransferDetail;
 use WechatPayTransferBundle\Enum\TransferDetailStatus;
 
-class TransferDetailTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(TransferDetail::class)]
+final class TransferDetailTest extends AbstractEntityTestCase
 {
-    private TransferDetail $detail;
-
-    protected function setUp(): void
+    protected function createEntity(): object
     {
-        $this->detail = new TransferDetail();
+        // 直接创建实例
+        return new TransferDetail();
     }
 
-    public function testGetSetId_withValidId_returnsSetValue(): void
+    /**
+     * @return iterable<string, array{string, mixed}>
+     */
+    public static function propertiesProvider(): iterable
+    {
+        yield 'outDetailNo' => ['outDetailNo', 'DETAIL202405010001'];
+        yield 'transferAmount' => ['transferAmount', 10000];
+        yield 'transferRemark' => ['transferRemark', '5月奖金'];
+        yield 'openid' => ['openid', 'oXYZ123456789'];
+        yield 'userName' => ['userName', '张三'];
+        yield 'userName_null' => ['userName', null];
+        yield 'detailId' => ['detailId', 'wxdetail1234567890'];
+        yield 'detailId_null' => ['detailId', null];
+        yield 'detailStatus' => ['detailStatus', TransferDetailStatus::PROCESSING];
+        yield 'detailStatus_null' => ['detailStatus', null];
+        yield 'createdBy' => ['createdBy', 'user123'];
+        yield 'updatedBy' => ['updatedBy', 'user456'];
+        yield 'createTime' => ['createTime', new \DateTimeImmutable()];
+        yield 'updateTime' => ['updateTime', new \DateTimeImmutable()];
+    }
+
+    public function testGetSetIdWithValidIdReturnsSetValue(): void
     {
         // ID字段由 Doctrine 自动生成，无法直接设置，只能通过反射设置进行测试
-        $reflection = new \ReflectionClass($this->detail);
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+        $reflection = new \ReflectionClass($detail);
         $idProperty = $reflection->getProperty('id');
         $idProperty->setAccessible(true);
-        $idProperty->setValue($this->detail, '123456789');
+        $idProperty->setValue($detail, '123456789');
 
-        $this->assertSame('123456789', $this->detail->getId());
+        $this->assertSame('123456789', $detail->getId());
     }
 
-    public function testGetSetBatch_withValidBatch_returnsSetValue(): void
+    public function testGetSetBatchWithValidBatchReturnsSetValue(): void
     {
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
         $batch = new TransferBatch();
-        
-        $result = $this->detail->setBatch($batch);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertSame($batch, $this->detail->getBatch());
+
+        $detail->setBatch($batch);
+        $this->assertSame($batch, $detail->getBatch());
     }
 
-    public function testGetSetOutDetailNo_withValidValue_returnsSetValue(): void
+    public function testGetSetOutDetailNoWithValidValueReturnsSetValue(): void
     {
         $outDetailNo = 'DETAIL202405010001';
-        
-        $result = $this->detail->setOutDetailNo($outDetailNo);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertSame($outDetailNo, $this->detail->getOutDetailNo());
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+
+        $detail->setOutDetailNo($outDetailNo);
+        $this->assertSame($outDetailNo, $detail->getOutDetailNo());
     }
 
-    public function testGetSetTransferAmount_withValidValue_returnsSetValue(): void
+    public function testGetSetTransferAmountWithValidValueReturnsSetValue(): void
     {
         $transferAmount = 10000; // 单位：分
-        
-        $result = $this->detail->setTransferAmount($transferAmount);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertSame($transferAmount, $this->detail->getTransferAmount());
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+
+        $detail->setTransferAmount($transferAmount);
+        $this->assertSame($transferAmount, $detail->getTransferAmount());
     }
 
-    public function testGetSetTransferRemark_withValidValue_returnsSetValue(): void
+    public function testGetSetTransferRemarkWithValidValueReturnsSetValue(): void
     {
         $transferRemark = '5月奖金';
-        
-        $result = $this->detail->setTransferRemark($transferRemark);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertSame($transferRemark, $this->detail->getTransferRemark());
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+
+        $detail->setTransferRemark($transferRemark);
+        $this->assertSame($transferRemark, $detail->getTransferRemark());
     }
 
-    public function testGetSetOpenid_withValidValue_returnsSetValue(): void
+    public function testGetSetOpenidWithValidValueReturnsSetValue(): void
     {
         $openid = 'oXYZ123456789';
-        
-        $result = $this->detail->setOpenid($openid);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertSame($openid, $this->detail->getOpenid());
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+
+        $detail->setOpenid($openid);
+        $this->assertSame($openid, $detail->getOpenid());
     }
 
-    public function testGetSetUserName_withValidValue_returnsSetValue(): void
+    public function testGetSetUserNameWithValidValueReturnsSetValue(): void
     {
         $userName = '张三';
-        
-        $result = $this->detail->setUserName($userName);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertSame($userName, $this->detail->getUserName());
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+
+        $detail->setUserName($userName);
+        $this->assertSame($userName, $detail->getUserName());
     }
 
-    public function testGetSetUserName_withNullValue_returnsSetValue(): void
+    public function testGetSetUserNameWithNullValueReturnsSetValue(): void
     {
-        $result = $this->detail->setUserName(null);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertNull($this->detail->getUserName());
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+        $detail->setUserName(null);
+        $this->assertNull($detail->getUserName());
     }
 
-    public function testGetSetDetailId_withValidValue_returnsSetValue(): void
+    public function testGetSetDetailIdWithValidValueReturnsSetValue(): void
     {
         $detailId = 'wxdetail1234567890';
-        
-        $result = $this->detail->setDetailId($detailId);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertSame($detailId, $this->detail->getDetailId());
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+
+        $detail->setDetailId($detailId);
+        $this->assertSame($detailId, $detail->getDetailId());
     }
 
-    public function testGetSetDetailId_withNullValue_returnsSetValue(): void
+    public function testGetSetDetailIdWithNullValueReturnsSetValue(): void
     {
-        $result = $this->detail->setDetailId(null);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertNull($this->detail->getDetailId());
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+        $detail->setDetailId(null);
+        $this->assertNull($detail->getDetailId());
     }
 
-    public function testGetSetDetailStatus_withValidStatus_returnsSetValue(): void
+    public function testGetSetDetailStatusWithValidStatusReturnsSetValue(): void
     {
         $status = TransferDetailStatus::PROCESSING;
-        
-        $result = $this->detail->setDetailStatus($status);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertSame($status, $this->detail->getDetailStatus());
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+
+        $detail->setDetailStatus($status);
+        $this->assertSame($status, $detail->getDetailStatus());
     }
 
-    public function testGetSetDetailStatus_withNullValue_returnsSetValue(): void
+    public function testGetSetDetailStatusWithNullValueReturnsSetValue(): void
     {
-        $result = $this->detail->setDetailStatus(null);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertNull($this->detail->getDetailStatus());
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+        $detail->setDetailStatus(null);
+        $this->assertNull($detail->getDetailStatus());
     }
 
-    public function testGetSetCreatedBy_withValidValue_returnsSetValue(): void
+    public function testGetSetCreatedByWithValidValueReturnsSetValue(): void
     {
         $createdBy = 'user123';
-        
-        $result = $this->detail->setCreatedBy($createdBy);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertSame($createdBy, $this->detail->getCreatedBy());
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+
+        $detail->setCreatedBy($createdBy);
+        $this->assertSame($createdBy, $detail->getCreatedBy());
     }
 
-    public function testGetSetUpdatedBy_withValidValue_returnsSetValue(): void
+    public function testGetSetUpdatedByWithValidValueReturnsSetValue(): void
     {
         $updatedBy = 'user456';
-        
-        $result = $this->detail->setUpdatedBy($updatedBy);
-        
-        $this->assertSame($this->detail, $result);
-        $this->assertSame($updatedBy, $this->detail->getUpdatedBy());
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+
+        $detail->setUpdatedBy($updatedBy);
+        $this->assertSame($updatedBy, $detail->getUpdatedBy());
     }
 
-    public function testGetSetCreateTime_withValidDateTime_returnsSetValue(): void
+    public function testGetSetCreateTimeWithValidDateTimeReturnsSetValue(): void
     {
-        $createTime = new DateTimeImmutable();
-        
-        $this->detail->setCreateTime($createTime);
-        
-        $this->assertEquals($createTime, $this->detail->getCreateTime());
+        $createTime = new \DateTimeImmutable();
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+
+        $detail->setCreateTime($createTime);
+
+        $this->assertEquals($createTime, $detail->getCreateTime());
     }
 
-    public function testGetSetUpdateTime_withValidDateTime_returnsSetValue(): void
+    public function testGetSetUpdateTimeWithValidDateTimeReturnsSetValue(): void
     {
-        $updateTime = new DateTimeImmutable();
-        
-        $this->detail->setUpdateTime($updateTime);
-        
-        $this->assertEquals($updateTime, $this->detail->getUpdateTime());
+        $updateTime = new \DateTimeImmutable();
+        /** @var TransferDetail $detail */
+        $detail = $this->createEntity();
+
+        $detail->setUpdateTime($updateTime);
+
+        $this->assertEquals($updateTime, $detail->getUpdateTime());
     }
-} 
+}

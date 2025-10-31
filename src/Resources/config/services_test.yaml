@@ -1,0 +1,9 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  WechatPayTransferBundle\Tests\Fixtures\:
+    resource: '../../../tests/Fixtures/*'
+    tags: ['doctrine.fixture.orm']
+    public: true

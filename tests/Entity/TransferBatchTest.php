@@ -2,208 +2,247 @@
 
 namespace WechatPayTransferBundle\Tests\Entity;
 
-use DateTimeImmutable;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Tourze\PHPUnitDoctrineEntity\AbstractEntityTestCase;
 use WechatPayBundle\Entity\Merchant;
 use WechatPayTransferBundle\Entity\TransferBatch;
 use WechatPayTransferBundle\Entity\TransferDetail;
 use WechatPayTransferBundle\Enum\TransferBatchStatus;
 
-class TransferBatchTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(TransferBatch::class)]
+final class TransferBatchTest extends AbstractEntityTestCase
 {
-    private TransferBatch $batch;
-
-    protected function setUp(): void
+    protected function createEntity(): object
     {
-        $this->batch = new TransferBatch();
+        // 直接创建实例，确保构造函数被调用以初始化集合
+        return new TransferBatch();
     }
 
-    public function testConstruct_initializedCollections(): void
+    /**
+     * @return iterable<string, array{string, mixed}>
+     */
+    public static function propertiesProvider(): iterable
     {
-        $details = $this->batch->getDetails();
-        
+        yield 'outBatchNo' => ['outBatchNo', 'BATCH202405010001'];
+        yield 'batchName' => ['batchName', '5月份员工奖金'];
+        yield 'batchRemark' => ['batchRemark', '2023年5月份员工奖金'];
+        yield 'totalAmount' => ['totalAmount', 100000];
+        yield 'totalNum' => ['totalNum', 10];
+        yield 'transferSceneId' => ['transferSceneId', 'SCENE1234567890'];
+        yield 'batchId' => ['batchId', 'wxbatch1234567890'];
+        yield 'batchStatus' => ['batchStatus', TransferBatchStatus::PROCESSING];
+        yield 'createdBy' => ['createdBy', 'user123'];
+        yield 'updatedBy' => ['updatedBy', 'user456'];
+        yield 'createTime' => ['createTime', new \DateTimeImmutable()];
+        yield 'updateTime' => ['updateTime', new \DateTimeImmutable()];
+    }
+
+    public function testConstructInitializedCollections(): void
+    {
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+        $details = $batch->getDetails();
+
         $this->assertCount(0, $details);
     }
 
-    public function testGetSetId_withValidId_returnsSetValue(): void
+    public function testGetSetIdWithValidIdReturnsSetValue(): void
     {
         // ID字段由 Doctrine 自动生成，无法直接设置，只能通过反射设置进行测试
-        $reflection = new \ReflectionClass($this->batch);
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+        $reflection = new \ReflectionClass($batch);
         $idProperty = $reflection->getProperty('id');
         $idProperty->setAccessible(true);
-        $idProperty->setValue($this->batch, '123456789');
+        $idProperty->setValue($batch, '123456789');
 
-        $this->assertSame('123456789', $this->batch->getId());
+        $this->assertSame('123456789', $batch->getId());
     }
 
-    public function testGetSetMerchant_withValidMerchant_returnsSetValue(): void
+    public function testGetSetMerchantWithValidMerchantReturnsSetValue(): void
     {
+        // 使用具体类 Merchant 的 createMock 的原因：
+        // 理由 1: Merchant 是核心业务实体类，设计上没有对应的接口或抽象类，为了保持数据一致性
+        // 理由 2: 测试只需要验证 get/set 方法的行为，不依赖具体实现逻辑，使用 mock 可以隔离测试
+        // 理由 3: 使用 mock 可以避免创建复杂的 Merchant 实例及其依赖关系（如数据库连接、配置等）
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
         $merchant = $this->createMock(Merchant::class);
-        
-        $result = $this->batch->setMerchant($merchant);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertSame($merchant, $this->batch->getMerchant());
+
+        $batch->setMerchant($merchant);
+
+        $this->assertSame($merchant, $batch->getMerchant());
     }
 
-    public function testGetSetOutBatchNo_withValidValue_returnsSetValue(): void
+    public function testGetSetOutBatchNoWithValidValueReturnsSetValue(): void
     {
         $outBatchNo = 'BATCH202405010001';
-        
-        $result = $this->batch->setOutBatchNo($outBatchNo);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertSame($outBatchNo, $this->batch->getOutBatchNo());
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+
+        $batch->setOutBatchNo($outBatchNo);
+        $this->assertSame($outBatchNo, $batch->getOutBatchNo());
     }
 
-    public function testGetSetBatchName_withValidValue_returnsSetValue(): void
+    public function testGetSetBatchNameWithValidValueReturnsSetValue(): void
     {
         $batchName = '5月份员工奖金';
-        
-        $result = $this->batch->setBatchName($batchName);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertSame($batchName, $this->batch->getBatchName());
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+
+        $batch->setBatchName($batchName);
+        $this->assertSame($batchName, $batch->getBatchName());
     }
 
-    public function testGetSetBatchRemark_withValidValue_returnsSetValue(): void
+    public function testGetSetBatchRemarkWithValidValueReturnsSetValue(): void
     {
         $batchRemark = '2023年5月份员工奖金';
-        
-        $result = $this->batch->setBatchRemark($batchRemark);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertSame($batchRemark, $this->batch->getBatchRemark());
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+
+        $batch->setBatchRemark($batchRemark);
+        $this->assertSame($batchRemark, $batch->getBatchRemark());
     }
 
-    public function testGetSetTotalAmount_withValidValue_returnsSetValue(): void
+    public function testGetSetTotalAmountWithValidValueReturnsSetValue(): void
     {
         $totalAmount = 100000; // 单位：分
-        
-        $result = $this->batch->setTotalAmount($totalAmount);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertSame($totalAmount, $this->batch->getTotalAmount());
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+
+        $batch->setTotalAmount($totalAmount);
+        $this->assertSame($totalAmount, $batch->getTotalAmount());
     }
 
-    public function testGetSetTotalNum_withValidValue_returnsSetValue(): void
+    public function testGetSetTotalNumWithValidValueReturnsSetValue(): void
     {
         $totalNum = 10;
-        
-        $result = $this->batch->setTotalNum($totalNum);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertSame($totalNum, $this->batch->getTotalNum());
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+
+        $batch->setTotalNum($totalNum);
+        $this->assertSame($totalNum, $batch->getTotalNum());
     }
 
-    public function testGetSetTransferSceneId_withValidValue_returnsSetValue(): void
+    public function testGetSetTransferSceneIdWithValidValueReturnsSetValue(): void
     {
         $transferSceneId = 'SCENE1234567890';
-        
-        $result = $this->batch->setTransferSceneId($transferSceneId);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertSame($transferSceneId, $this->batch->getTransferSceneId());
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+
+        $batch->setTransferSceneId($transferSceneId);
+        $this->assertSame($transferSceneId, $batch->getTransferSceneId());
     }
 
-    public function testGetSetBatchId_withValidValue_returnsSetValue(): void
+    public function testGetSetBatchIdWithValidValueReturnsSetValue(): void
     {
         $batchId = 'wxbatch1234567890';
-        
-        $result = $this->batch->setBatchId($batchId);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertSame($batchId, $this->batch->getBatchId());
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+
+        $batch->setBatchId($batchId);
+        $this->assertSame($batchId, $batch->getBatchId());
     }
 
-    public function testGetSetBatchStatus_withValidStatus_returnsSetValue(): void
+    public function testGetSetBatchStatusWithValidStatusReturnsSetValue(): void
     {
         $status = TransferBatchStatus::PROCESSING;
-        
-        $result = $this->batch->setBatchStatus($status);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertSame($status, $this->batch->getBatchStatus());
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+
+        $batch->setBatchStatus($status);
+        $this->assertSame($status, $batch->getBatchStatus());
     }
 
-    public function testGetSetCreatedBy_withValidValue_returnsSetValue(): void
+    public function testGetSetCreatedByWithValidValueReturnsSetValue(): void
     {
         $createdBy = 'user123';
-        
-        $result = $this->batch->setCreatedBy($createdBy);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertSame($createdBy, $this->batch->getCreatedBy());
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+
+        $batch->setCreatedBy($createdBy);
+        $this->assertSame($createdBy, $batch->getCreatedBy());
     }
 
-    public function testGetSetUpdatedBy_withValidValue_returnsSetValue(): void
+    public function testGetSetUpdatedByWithValidValueReturnsSetValue(): void
     {
         $updatedBy = 'user456';
-        
-        $result = $this->batch->setUpdatedBy($updatedBy);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertSame($updatedBy, $this->batch->getUpdatedBy());
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+
+        $batch->setUpdatedBy($updatedBy);
+        $this->assertSame($updatedBy, $batch->getUpdatedBy());
     }
 
-    public function testGetSetCreateTime_withValidDateTime_returnsSetValue(): void
+    public function testGetSetCreateTimeWithValidDateTimeReturnsSetValue(): void
     {
-        $createTime = new DateTimeImmutable();
-        
-        $this->batch->setCreateTime($createTime);
-        
-        $this->assertEquals($createTime, $this->batch->getCreateTime());
+        $createTime = new \DateTimeImmutable();
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+
+        $batch->setCreateTime($createTime);
+
+        $this->assertEquals($createTime, $batch->getCreateTime());
     }
 
-    public function testGetSetUpdateTime_withValidDateTime_returnsSetValue(): void
+    public function testGetSetUpdateTimeWithValidDateTimeReturnsSetValue(): void
     {
-        $updateTime = new DateTimeImmutable();
-        
-        $this->batch->setUpdateTime($updateTime);
-        
-        $this->assertEquals($updateTime, $this->batch->getUpdateTime());
+        $updateTime = new \DateTimeImmutable();
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
+
+        $batch->setUpdateTime($updateTime);
+
+        $this->assertEquals($updateTime, $batch->getUpdateTime());
     }
 
-    public function testAddDetail_withNewDetail_addsToCollection(): void
+    public function testAddDetailWithNewDetailAddsToCollection(): void
     {
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
         $detail = new TransferDetail();
-        
-        $result = $this->batch->addDetail($detail);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertTrue($this->batch->getDetails()->contains($detail));
-        $this->assertSame($this->batch, $detail->getBatch());
+
+        $batch->addDetail($detail);
+
+        $this->assertTrue($batch->getDetails()->contains($detail));
+        $this->assertSame($batch, $detail->getBatch());
     }
 
-    public function testAddDetail_withAlreadyAddedDetail_doesNotDuplicate(): void
+    public function testAddDetailWithAlreadyAddedDetailDoesNotDuplicate(): void
     {
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
         $detail = new TransferDetail();
-        $this->batch->addDetail($detail);
-        
-        $result = $this->batch->addDetail($detail);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertCount(1, $this->batch->getDetails());
+        $batch->addDetail($detail);
+
+        $batch->addDetail($detail);
+
+        $this->assertCount(1, $batch->getDetails());
     }
 
-    public function testRemoveDetail_withExistingDetail_removesFromCollection(): void
+    public function testRemoveDetailWithExistingDetailRemovesFromCollection(): void
     {
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
         $detail = new TransferDetail();
-        $this->batch->addDetail($detail);
-        
-        $result = $this->batch->removeDetail($detail);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertFalse($this->batch->getDetails()->contains($detail));
+        $batch->addDetail($detail);
+
+        $batch->removeDetail($detail);
+
+        $this->assertFalse($batch->getDetails()->contains($detail));
     }
 
-    public function testRemoveDetail_withNonExistingDetail_doesNothing(): void
+    public function testRemoveDetailWithNonExistingDetailDoesNothing(): void
     {
+        /** @var TransferBatch $batch */
+        $batch = $this->createEntity();
         $detail = new TransferDetail();
-        
-        $result = $this->batch->removeDetail($detail);
-        
-        $this->assertSame($this->batch, $result);
-        $this->assertCount(0, $this->batch->getDetails());
+
+        $batch->removeDetail($detail);
+
+        $this->assertCount(0, $batch->getDetails());
     }
-} 
+}
