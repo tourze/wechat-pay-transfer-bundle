@@ -888,6 +888,7 @@ final class TransferApiControllerTest extends AbstractWebTestCase
         $this->assertIsArray($data);
         $this->assertTrue($data['success']);
         $this->assertSame('微信支付转账API', $data['message']);
+        $this->assertIsArray($data['data']);
         $this->assertArrayHasKey('available_endpoints', $data['data']);
         $this->assertArrayHasKey('version', $data['data']);
 

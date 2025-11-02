@@ -207,6 +207,7 @@ class TransferApiService
 
             $statusCode = $response->getStatusCode();
             $responseData = $response->toArray(false);
+            /** @var array<string, mixed> $responseData */
 
             if ($statusCode !== Response::HTTP_OK) {
                 $errorMessage = $responseData['message'] ?? '未知错误';
@@ -387,6 +388,7 @@ class TransferApiService
 
             $statusCode = $response->getStatusCode();
             $responseData = $response->toArray(false);
+            /** @var array<string, mixed> $responseData */
 
             if ($statusCode !== Response::HTTP_OK) {
                 $errorMessage = $responseData['message'] ?? '未知错误';
@@ -679,6 +681,7 @@ class TransferApiService
 
         $statusCode = $response->getStatusCode();
         $responseData = $response->toArray(false);
+        /** @var array<string, mixed> $responseData */
 
         if ($statusCode !== Response::HTTP_OK) {
             $errorMessage = $responseData['message'] ?? '未知错误';

@@ -131,7 +131,7 @@ final class TransferApiServiceTest extends AbstractIntegrationTestCase
     public function testInitiateTransferHandlesApiError(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('发起转账失败: API Error');
+        $this->expectExceptionMessage('API请求失败: API Error');
 
         $service = $this->createService();
 

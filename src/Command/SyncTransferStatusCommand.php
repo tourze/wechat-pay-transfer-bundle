@@ -459,7 +459,8 @@ EOF
         foreach ($result['transfer_detail_list'] as $detailData) {
             assert(is_array($detailData));
             if (($detailData['out_detail_no'] ?? '') === $outDetailNo) {
-                return $detailData['detail_status'] ?? null;
+                $detailStatus = $detailData['detail_status'] ?? null;
+                return is_string($detailStatus) ? $detailStatus : null;
             }
         }
 

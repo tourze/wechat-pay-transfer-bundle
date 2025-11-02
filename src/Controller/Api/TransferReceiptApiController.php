@@ -379,4 +379,29 @@ final class TransferReceiptApiController extends AbstractController
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * API文档页面
+     *
+     * 返回微信支付转账电子回单API的可用端点列表
+     */
+    #[Route(path: '', name: 'api_wechat_pay_transfer_receipt_docs', methods: ['GET'])]
+    public function __invoke(Request $request): JsonResponse
+    {
+        return new JsonResponse([
+            'success' => true,
+            'message' => '微信支付转账电子回单API',
+            'data' => [
+                'available_endpoints' => [
+                    'POST /receipt/apply/out-batch-no' => '按商户批次单号申请电子回单',
+                    'POST /receipt/apply/batch-id' => '按微信批次单号申请电子回单',
+                    'GET /receipt/query/out-batch-no' => '按商户批次单号查询电子回单',
+                    'GET /receipt/query/batch-id' => '按微信批次单号查询电子回单',
+                    'GET /receipt/download' => '下载电子回单',
+                    'POST /receipt/batch-apply' => '批量申请电子回单',
+                ],
+                'version' => '1.0.0',
+            ],
+        ]);
+    }
 }

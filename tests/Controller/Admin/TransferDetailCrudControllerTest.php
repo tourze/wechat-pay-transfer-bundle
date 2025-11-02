@@ -80,6 +80,9 @@ final class TransferDetailCrudControllerTest extends AbstractEasyAdminController
 
         $form = $crawler->selectButton('Create')->form();
         $formData = $form->getPhpValues();
+        $this->assertIsArray($formData);
+        $this->assertArrayHasKey('TransferDetail', $formData);
+        $this->assertIsArray($formData['TransferDetail']);
         $formData['TransferDetail']['batch'] = (string) $batch->getId();
         $formData['TransferDetail']['outDetailNo'] = '';
         $formData['TransferDetail']['transferAmount'] = -1;

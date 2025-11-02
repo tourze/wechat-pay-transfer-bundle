@@ -150,6 +150,9 @@ final class TransferBatchCrudControllerTest extends AbstractEasyAdminControllerT
 
         $form = $crawler->selectButton('Create')->form();
         $formData = $form->getPhpValues();
+        $this->assertIsArray($formData);
+        $this->assertArrayHasKey('TransferBatch', $formData);
+        $this->assertIsArray($formData['TransferBatch']);
         $formData['TransferBatch']['merchant'] = (string) $merchant->getId();
         $formData['TransferBatch']['outBatchNo'] = '';
         $formData['TransferBatch']['batchName'] = '';
