@@ -8,6 +8,7 @@ use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Tourze\BundleDependency\BundleDependencyInterface;
 use WechatPayBundle\WechatPayBundle;
+use Tourze\EasyAdminMenuBundle\EasyAdminMenuBundle;
 
 class WechatPayTransferBundle extends Bundle implements BundleDependencyInterface
 {
@@ -19,6 +20,7 @@ class WechatPayTransferBundle extends Bundle implements BundleDependencyInterfac
         return [
             DoctrineBundle::class => ['all' => true],
             WechatPayBundle::class => ['all' => true],
+            EasyAdminMenuBundle::class => ['all' => true],
         ];
     }
 }
