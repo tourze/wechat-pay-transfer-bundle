@@ -96,12 +96,7 @@ final class TransferDetailCrudControllerTest extends AbstractEasyAdminController
         $this->assertStringContainsString('should not be blank', $errorText);
     }
 
-    protected function onSetUp(): void
-    {
-        $client = self::createClientWithDatabase();
-        self::getClient($client);
-    }
-
+    
     public function testFixtureLoaded(): void
     {
         self::createClientWithDatabase();

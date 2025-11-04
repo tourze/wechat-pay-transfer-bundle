@@ -27,12 +27,6 @@ final class TransferBatchCrudControllerTest extends AbstractEasyAdminControllerT
         return self::getService(TransferBatchCrudController::class);
     }
 
-    protected function onSetUp(): void
-    {
-        $client = self::createClientWithDatabase();
-        self::getClient($client);
-    }
-
     public function testFixtureLoaded(): void
     {
         self::createClientWithDatabase();

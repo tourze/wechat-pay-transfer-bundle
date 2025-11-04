@@ -31,11 +31,9 @@ final class TransferReceiptCrudControllerTest extends AbstractEasyAdminControlle
         return self::getService(TransferReceiptCrudController::class);
     }
 
-    protected function onSetUp(): void
+    
+    private function createTestFixtures(): void
     {
-        $client = self::createClientWithDatabase();
-        self::getClient($client);
-
         // 创建测试数据以确保索引页面有内容显示
         $entityManager = self::getEntityManager();
 
@@ -44,6 +42,9 @@ final class TransferReceiptCrudControllerTest extends AbstractEasyAdminControlle
         $existingCount = $repository->count([]);
 
         if ($existingCount === 0) {
+            $client = self::createClientWithDatabase();
+            self::getClient($client);
+
             // 创建一个基本的TransferReceipt实体用于测试
             $merchant = new Merchant();
             $merchant->setMchId('TEST_MCH_' . uniqid());
@@ -84,7 +85,9 @@ final class TransferReceiptCrudControllerTest extends AbstractEasyAdminControlle
 
     public function testFixtureLoaded(): void
     {
-        self::createClientWithDatabase();
+        // 确保测试数据存在，为其他测试提供基础
+        $this->createTestFixtures();
+
         $repository = self::getEntityManager()->getRepository(TransferReceipt::class);
         $count = $repository->count([]);
 
@@ -296,6 +299,9 @@ final class TransferReceiptCrudControllerTest extends AbstractEasyAdminControlle
      */
     public function testValidationErrors(): void
     {
+        // 确保测试数据存在
+        $this->createTestFixtures();
+
         $client = $this->createAuthenticatedClient();
 
         $crawler = $client->request('GET', $this->generateAdminUrl(Action::NEW));
