@@ -41,7 +41,7 @@
     "nesbot/carbon": "^2.72 || ^3",
     "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^11.5",
-    "tourze/http-client-bundle": "1.0.*",
+    "tourze/http-client-bundle": "1.1.*",
     "tourze/phpunit-base": "1.*",
     "tourze/phpunit-doctrine-entity": "1.*",
     "tourze/phpunit-enum": "1.*",
