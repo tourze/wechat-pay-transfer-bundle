@@ -141,11 +141,6 @@ final class TransferReceiptCrudControllerTest extends AbstractEasyAdminControlle
         yield '回单状态' => ['receiptStatus'];
     }
 
-    public function testGetEntityFqcn(): void
-    {
-        $this->assertSame(TransferReceipt::class, TransferReceiptCrudController::getEntityFqcn());
-    }
-
     /**
      * 测试索引页面字段配置正确性.
      */

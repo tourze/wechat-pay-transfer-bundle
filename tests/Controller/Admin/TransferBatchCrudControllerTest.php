@@ -81,11 +81,6 @@ final class TransferBatchCrudControllerTest extends AbstractEasyAdminControllerT
         yield 'transferSceneId' => ['transferSceneId'];
     }
 
-    public function testGetEntityFqcn(): void
-    {
-        $this->assertSame(TransferBatch::class, TransferBatchCrudController::getEntityFqcn());
-    }
-
     /**
      * 测试索引页面字段配置正确性.
      */

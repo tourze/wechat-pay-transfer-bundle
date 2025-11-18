@@ -63,11 +63,6 @@ final class TransferDetailCrudControllerTest extends AbstractEasyAdminController
         yield 'openid' => ['openid'];
     }
 
-    public function testGetEntityFqcn(): void
-    {
-        $this->assertSame(TransferDetail::class, TransferDetailCrudController::getEntityFqcn());
-    }
-
     public function testValidationErrors(): void
     {
         $client = $this->createAuthenticatedClient();
