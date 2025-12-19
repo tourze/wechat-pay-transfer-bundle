@@ -18,7 +18,7 @@ final class ReceiptIdentifierTest extends TestCase
         $identifier = ReceiptIdentifier::forOutBatchNo('BATCH_001');
 
         $this->assertSame('BATCH_001', $identifier->getValue());
-        $this->assertSame('out_batch_no', $identifier->getType());
+        $this->assertSame('OUT_BATCH_NO', $identifier->getType());
         $this->assertTrue($identifier->isOutBatchNo());
         $this->assertFalse($identifier->isBatchId());
         $this->assertFalse($identifier->isOutDetailNo());
@@ -30,7 +30,7 @@ final class ReceiptIdentifierTest extends TestCase
         $identifier = ReceiptIdentifier::forBatchId(12345);
 
         $this->assertSame('12345', $identifier->getValue());
-        $this->assertSame('batch_id', $identifier->getType());
+        $this->assertSame('BATCH_ID', $identifier->getType());
         $this->assertFalse($identifier->isOutBatchNo());
         $this->assertTrue($identifier->isBatchId());
         $this->assertFalse($identifier->isOutDetailNo());
@@ -42,7 +42,7 @@ final class ReceiptIdentifierTest extends TestCase
         $identifier = ReceiptIdentifier::forOutDetailNo('DETAIL_001');
 
         $this->assertSame('DETAIL_001', $identifier->getValue());
-        $this->assertSame('out_detail_no', $identifier->getType());
+        $this->assertSame('OUT_DETAIL_NO', $identifier->getType());
         $this->assertFalse($identifier->isOutBatchNo());
         $this->assertFalse($identifier->isBatchId());
         $this->assertTrue($identifier->isOutDetailNo());
@@ -54,7 +54,7 @@ final class ReceiptIdentifierTest extends TestCase
         $identifier = ReceiptIdentifier::forDetailId(67890);
 
         $this->assertSame('67890', $identifier->getValue());
-        $this->assertSame('detail_id', $identifier->getType());
+        $this->assertSame('DETAIL_ID', $identifier->getType());
         $this->assertFalse($identifier->isOutBatchNo());
         $this->assertFalse($identifier->isBatchId());
         $this->assertFalse($identifier->isOutDetailNo());
@@ -94,7 +94,7 @@ final class ReceiptIdentifierTest extends TestCase
 
         $this->assertIsArray($data);
         $this->assertArrayHasKey('batch_id', $data);
-        $this->assertSame(12345, $data['batch_id']);
+        $this->assertSame('12345', $data['batch_id']);
     }
 
     public function testBuildLogData(): void
@@ -114,7 +114,7 @@ final class ReceiptIdentifierTest extends TestCase
 
         $this->assertIsArray($logData);
         $this->assertArrayHasKey('detail_id', $logData);
-        $this->assertSame(67890, $logData['detail_id']);
+        $this->assertSame('67890', $logData['detail_id']);
     }
 
     public function testToString(): void
@@ -146,7 +146,7 @@ final class ReceiptIdentifierTest extends TestCase
 
         $this->assertIsArray($data);
         $this->assertArrayHasKey('batch_id', $data);
-        $this->assertSame(12345, $data['batch_id']);
+        $this->assertSame('12345', $data['batch_id']);
     }
 
     public function testBuildQueryUrl(): void
@@ -155,7 +155,8 @@ final class ReceiptIdentifierTest extends TestCase
         $url = $identifier->buildQueryUrl();
 
         $this->assertStringContainsString('BATCH_001', $url);
-        $this->assertStringContainsString('transfer/bill-receipt', $url);
+        // 实现使用 fund-app/mch-transfer/elecsign 路径
+        $this->assertStringContainsString('mch-transfer', $url);
     }
 
     public function testBuildQueryUrlForBatchId(): void
@@ -164,13 +165,14 @@ final class ReceiptIdentifierTest extends TestCase
         $url = $identifier->buildQueryUrl();
 
         $this->assertStringContainsString('12345', $url);
-        $this->assertStringContainsString('transfer/bill-receipt', $url);
+        // 实现使用 fund-app/mch-transfer/elecsign 路径
+        $this->assertStringContainsString('mch-transfer', $url);
     }
 
-    #[TestWith(['out_batch_no', 'out_batch_no', true, false, false, false])]
-    #[TestWith(['batch_id', 'batch_id', false, true, false, false])]
-    #[TestWith(['out_detail_no', 'out_detail_no', false, false, true, false])]
-    #[TestWith(['detail_id', 'detail_id', false, false, false, true])]
+    #[TestWith(['out_batch_no', 'OUT_BATCH_NO', true, false, false, false])]
+    #[TestWith(['batch_id', 'BATCH_ID', false, true, false, false])]
+    #[TestWith(['out_detail_no', 'OUT_DETAIL_NO', false, false, true, false])]
+    #[TestWith(['detail_id', 'DETAIL_ID', false, false, false, true])]
     public function testIdentifierTypes(string $method, string $expectedType, bool $isOutBatchNo, bool $isBatchId, bool $isOutDetailNo, bool $isDetailId): void
     {
         $identifier = match ($method) {

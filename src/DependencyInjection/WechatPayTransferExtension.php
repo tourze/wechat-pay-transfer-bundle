@@ -6,7 +6,7 @@ namespace WechatPayTransferBundle\DependencyInjection;
 
 use Tourze\SymfonyDependencyServiceLoader\AutoExtension;
 
-class WechatPayTransferExtension extends AutoExtension
+final class WechatPayTransferExtension extends AutoExtension
 {
     protected function getConfigDir(): string
     {

@@ -11,7 +11,6 @@ use WechatPayTransferBundle\WechatPayTransferBundle;
 
 /**
  * @internal
- * @phpstan-ignore symplify.forbiddenExtendOfNonAbstractClass
  */
 #[CoversClass(WechatPayTransferBundle::class)]
 #[RunTestsInSeparateProcesses]

@@ -31,7 +31,15 @@ final class TransferReceiptCrudControllerTest extends AbstractEasyAdminControlle
         return self::getService(TransferReceiptCrudController::class);
     }
 
-    
+    /**
+     * 在 EasyAdmin 设置之后创建测试数据
+     */
+    protected function afterEasyAdminSetUp(): void
+    {
+        parent::afterEasyAdminSetUp();
+        $this->createTestFixtures();
+    }
+
     private function createTestFixtures(): void
     {
         // 创建测试数据以确保索引页面有内容显示
@@ -81,22 +89,6 @@ final class TransferReceiptCrudControllerTest extends AbstractEasyAdminControlle
 
             $entityManager->flush();
         }
-    }
-
-    public function testFixtureLoaded(): void
-    {
-        // 确保测试数据存在，为其他测试提供基础
-        $this->createTestFixtures();
-
-        $repository = self::getEntityManager()->getRepository(TransferReceipt::class);
-        $count = $repository->count([]);
-
-        // 如果没有测试数据，跳过这个断言 - 这在测试环境中是正常的
-        if ($count === 0) {
-            self::markTestSkipped('No test fixtures found in database');
-        }
-
-        $this->assertGreaterThan(0, $count);
     }
 
     /**
@@ -294,9 +286,6 @@ final class TransferReceiptCrudControllerTest extends AbstractEasyAdminControlle
      */
     public function testValidationErrors(): void
     {
-        // 确保测试数据存在
-        $this->createTestFixtures();
-
         $client = $this->createAuthenticatedClient();
 
         $crawler = $client->request('GET', $this->generateAdminUrl(Action::NEW));
