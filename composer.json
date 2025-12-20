@@ -32,7 +32,7 @@
     "tourze/enum-extra": "1.0.*",
     "tourze/symfony-dependency-service-loader": "1.0.*",
     "tourze/symfony-routing-auto-loader-bundle": "1.0.*",
-    "tourze/wechat-pay-bundle": "0.0.*"
+    "tourze/wechat-pay-bundle": "0.1.*"
   },
   "require-dev": {
     "doctrine/data-fixtures": "^2.0",
